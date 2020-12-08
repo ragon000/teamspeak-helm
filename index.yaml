@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  team-speak:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2020-12-08T08:36:23.615315706Z"
+    description: Teamspeak 3 for team-container
+    digest: a2160b53c525d102e826451289565c7bc87b8318aa9f98d648b3c2f2334b0dd3
+    name: team-speak
+    type: application
+    urls:
+    - https://github.com/ragon000/teamspeak-helm/releases/download/team-speak-0.0.1/team-speak-0.0.1.tgz
+    version: 0.0.1
+generated: "2020-12-08T08:36:23.530194301Z"
