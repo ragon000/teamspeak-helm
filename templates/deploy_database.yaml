@@ -1,0 +1,44 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: default
+  name: {{ include "team-speak.fullname" . }}-db
+  labels:
+    app: {{ include "team-speak.fullname" . }}-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "team-speak.fullname" . }}-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ include "team-speak.fullname" . }}-db
+      annotations:
+        timestamp: "{{ now | unixEpoch }}"
+    spec:
+      volumes:
+       - name: team-db-vol
+         persistentVolumeClaim:
+           claimName: {{ include "team-speak.fullname" . }}-db
+      containers:
+        - name: {{ include "team-speak.fullname" . }}-db
+          image: mariadb
+          imagePullPolicy: Always
+          volumeMounts:
+           - name: team-db-vol
+             mountPath: "/var/lib/mysql"
+          ports:
+            - containerPort: 3306
+              name: sql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "team-speak.fullname" . }}-secret
+                  key: rootpassword
+            - name: MYSQL_DATABASE
+              value: "ts"

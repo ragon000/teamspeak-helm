@@ -1,0 +1,47 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: default
+  name: {{ include "team-speak.fullname" . }}-ts
+  labels:
+    app: {{ include "team-speak.fullname" . }}-ts
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "team-speak.fullname" . }}-ts
+  template:
+    metadata:
+      labels:
+        app: {{ include "team-speak.fullname" . }}-ts
+      annotations:
+        timestamp: "{{ now | unixEpoch }}"
+    spec:
+      containers:
+       - name: ts3
+         image: teamspeak
+         imagePullPolicy: Always
+         ports:
+          - name: voice
+            containerPort: 9987
+          - name: query
+            containerPort: 10011
+          - name: newquery
+            containerPort: 30033
+         env:
+          - name: TS3SERVER_DB_HOST
+            value: {{ include "team-speak.fullname" . }}-db
+          - name: TS3SERVER_DB_PLUGIN
+            value: ts3db_mariadb
+          - name: TS3SERVER_DB_SQLCREATEPATH
+            value: create_mariadb
+          - name: TS3SERVER_LICENSE
+            value: {{ .Values.license }}
+          - name: TS3SERVER_DB_NAME
+            value: ts
+          - name: TS3SERVER_DB_WAITUNTILREADY
+            value: "30"
+          - name: TS3SERVER_DB_USER
+            value: root
+          - name: TS3SERVER_DB_PASSWORD
+            value: {{ .Values.database.root_password }}

@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "team-speak.fullname" . }}-ts
+  namespace: default
+spec:
+  ports:
+    - protocol: UDP
+      name: voice
+      port: 9987
+    - protocol: TCP
+      name: query
+      port: 10011
+    - protocol: TCP
+      name: newquery
+      port: 30033
+  externalIPs:
+    - {{ .Values.ip }}
+  selector:
+    app: {{ include "team-speak.fullname" . }}-ts
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "team-speak.fullname" . }}-db
+  namespace: default
+spec:
+  ports:
+    - protocol: TCP
+      name: sql
+      port: 3306
+  selector:
+    app: {{ include "team-speak.fullname" . }}-db

@@ -1,0 +1,11 @@
+# Storage limit for ts3 database:
+storage:
+  limits:
+    database: 128Gi
+
+# set to accept to accept the ts3 license
+license: accept
+
+# No need to change these values. For internal database account only:
+database:
+  root_password: "very123secret#passWord!"
